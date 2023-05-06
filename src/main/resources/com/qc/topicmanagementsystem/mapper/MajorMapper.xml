@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qc.topicmanagementsystem.mapper.MajorMapper">
+
+    <!--int addMajor(Major major);-->
+    <insert id="addMajor" parameterType="com.qc.topicmanagementsystem.pojo.Major">
+        insert into major
+        values (#{id}, #{name},#{collegeId})
+    </insert>
+
+    <!--        int updataMajor(Major major);-->
+    <update id="updataMajor">
+        update major set name = #{name},college_id = #{collegeId} where id = #{id}
+    </update>
+    <!--        List<Major> listMajor();-->
+    <select id="listMajor" resultType="com.qc.topicmanagementsystem.pojo.Major">
+        select * from major
+    </select>
+
+    <!--        Major getOneMajorById(@Param("id") Long id);-->
+    <select id="getOneMajorById" resultType="com.qc.topicmanagementsystem.pojo.Major">
+        select * from major where id = #{id}
+    </select>
+    <!--        int deleteMajor(@Param("id") Long id);-->
+    <delete id="deleteMajor">
+        delete from major where id = #{id}
+    </delete>
+
+</mapper>

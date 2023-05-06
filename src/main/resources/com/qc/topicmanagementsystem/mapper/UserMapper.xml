@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qc.topicmanagementsystem.mapper.UserMapper">
+
+    <!--查询用户表中一共有多少条数据 public Integer selectSize(); -->
+    <select id="selectSize" resultType="Integer">select count(1)
+                                                 from user</select>
+
+    <!--public List<User> selectUserByPage(PageUtil pageUtil);-->
+    <!--   从页头索引到页尾索引 startIndex实际为pageNum endIndex为pageSize 懒得改了-->
+    <select id="selectUserByPage" parameterType="com.qc.topicmanagementsystem.utils.PageUtil"
+            resultType="com.qc.topicmanagementsystem.pojo.User">
+        select uu.*
+        from (select row_number() over( order By id) as rownumber, u.* from user u) uu
+        where uu.rownumber > (#{startIndex} - 1) * #{endIndex}
+          and uu.rownumber <![CDATA[<=]]> #{startIndex} * #{endIndex}
+    </select>
+
+    <!--    int addUser(User user);-->
+    <insert id="addUser" parameterType="com.qc.topicmanagementsystem.pojo.User">
+        insert into user
+        values (#{id}, #{name}, #{status}, #{permission}, #{majorId}, #{password}, #{age}, #{sex}, #{phone},
+                #{username})
+    </insert>
+
+    <!--        int updataUser(User user);-->
+    <update id="updataUser">
+        update user
+        set name       = #{name},
+            status     = #{status},
+            permission = #{permission},
+            major_id   = #{majorId},
+            age        = #{age},
+            sex        = #{sex},
+            phone      = #{phone}
+        where id = #{id}
+    </update>
+
+    <!--int deleteUser(@Param("id") Long id);-->
+    <delete id="deleteUser" parameterType="Long">
+        delete from user where id = #{id}
+    </delete>
+
+<!--        List<User> selectTeacher();-->
+    <select id="selectTeacher" resultType="com.qc.topicmanagementsystem.pojo.User">
+        select * from user where permission = 3
+    </select>
+<!--    User selectById(Long id);-->
+    <select id="selectById" resultType="com.qc.topicmanagementsystem.pojo.User">
+        select * from user where id = #{id}
+    </select>
+
+
+</mapper>

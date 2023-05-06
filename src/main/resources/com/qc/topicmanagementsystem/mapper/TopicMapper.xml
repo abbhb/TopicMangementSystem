@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qc.topicmanagementsystem.mapper.TopicMapper">
+
+    <!--   int addTopic(Topic topic);-->
+    <insert id="addTopic" parameterType="com.qc.topicmanagementsystem.pojo.Topic">
+        insert into topic values (#{id},#{title},#{status},#{teacher})
+    </insert>
+
+
+    <resultMap id="TopicAndUserDTOsss" type="com.qc.topicmanagementsystem.pojo.dto.TopicAndUserDTO">
+        <id property="id" column="id"></id>
+        <result property="title" column="title"/>
+        <result property="status" column="status"/>
+        <result property="teacher" column="teacher"/>
+        <result property="teacherName" column="name"/>
+    </resultMap>
+
+<!--                TopicAndUserDTO self(@Param("id")Long topicId);-->
+    <select id="self" resultMap="TopicAndUserDTOsss">
+        select topic.*,u.name from topic left join user u on u.id = topic.teacher where topic.id = #{id}
+    </select>
+
+    <!--List<TopicAndUserDTO> admin();-->
+    <select id="admin" resultMap="TopicAndUserDTOsss">
+        select topic.*,u.name from topic left join user u on u.id = topic.teacher
+    </select>
+
+    <!--         List<Topic> teacher(@Param("id")Long teacherId);-->
+    <select id="teacher" resultType="com.qc.topicmanagementsystem.pojo.Topic">
+        select topic.* from topic where topic.teacher = #{id}
+    </select>
+
+<!--        int updataTopic(Topic topic);-->
+    <update id="updataTopic" parameterType="com.qc.topicmanagementsystem.pojo.Topic">
+        update topic set title = #{title},teacher = #{teacher} where id = #{id}
+    </update>
+
+    <!--int updataTopicStatus(Topic topic); -->
+    <update id="updataTopicStatus" parameterType="com.qc.topicmanagementsystem.pojo.Topic">
+        update topic set status = #{status} where id = #{id}
+    </update>
+
+<!--        int deleteTopic(@Param("id")Long topicId);-->
+    <delete id="deleteTopic">
+        delete from topic where id = #{id}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qc.topicmanagementsystem.mapper.CollegeMapper">
+
+    <!--int addCollege(College college);-->
+    <insert id="addCollege" parameterType="com.qc.topicmanagementsystem.pojo.College">
+        insert into college
+        values (#{id}, #{name})
+    </insert>
+
+<!--        int updataCollege(College college);-->
+    <update id="updataCollege">
+        update college set name = #{name} where id = #{id}
+    </update>
+<!--        List<College> listCollege();-->
+    <select id="listCollege" resultType="com.qc.topicmanagementsystem.pojo.College">
+        select * from college
+    </select>
+
+<!--        College getOneCollegeById(@Param("id") Long id);-->
+    <select id="getOneCollegeById" resultType="com.qc.topicmanagementsystem.pojo.College">
+        select * from college where id = #{id}
+    </select>
+<!--        int deleteCollege(@Param("id") Long id);-->
+    <delete id="deleteCollege">
+        delete from college where id = #{id}
+    </delete>
+</mapper>
