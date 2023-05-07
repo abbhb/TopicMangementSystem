@@ -5,6 +5,7 @@ import com.qc.topicmanagementsystem.common.annotation.NeedLogin;
 import com.qc.topicmanagementsystem.common.annotation.PermissionCheck;
 import com.qc.topicmanagementsystem.pojo.User;
 import com.qc.topicmanagementsystem.pojo.vo.UserResult;
+import com.qc.topicmanagementsystem.pojo.vo.UserResult2;
 import com.qc.topicmanagementsystem.service.IRedisService;
 import com.qc.topicmanagementsystem.service.UserService;
 import com.qc.topicmanagementsystem.utils.JWTUtil;
@@ -152,7 +153,7 @@ public class UserController {
     @NeedLogin
     @PermissionCheck("2")
     @GetMapping("/list")
-    public R<List<UserResult>> list(Integer pageNums,Integer pageSize){
+    public R<List<UserResult2>> list(Integer pageNums, Integer pageSize){
         if (pageNums==null||pageSize==null){
             return R.error("err");
         }

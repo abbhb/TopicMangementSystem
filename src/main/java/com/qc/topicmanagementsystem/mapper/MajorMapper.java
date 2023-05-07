@@ -46,4 +46,5 @@ public interface MajorMapper extends BaseMapper<Major> {
      */
     int deleteMajor(@Param("id") Long id);
 
+    List<Major> getOneMajorByCollegeId(@Param("id") Long id);
 }

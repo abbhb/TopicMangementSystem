@@ -7,11 +7,17 @@ import com.qc.topicmanagementsystem.common.Code;
 import com.qc.topicmanagementsystem.common.CustomException;
 import com.qc.topicmanagementsystem.common.MyString;
 import com.qc.topicmanagementsystem.common.R;
+import com.qc.topicmanagementsystem.mapper.CollegeMapper;
 import com.qc.topicmanagementsystem.mapper.UserMapper;
+import com.qc.topicmanagementsystem.pojo.College;
+import com.qc.topicmanagementsystem.pojo.Major;
 import com.qc.topicmanagementsystem.pojo.Permission;
 import com.qc.topicmanagementsystem.pojo.User;
 import com.qc.topicmanagementsystem.pojo.vo.UserResult;
+import com.qc.topicmanagementsystem.pojo.vo.UserResult2;
+import com.qc.topicmanagementsystem.service.CollegeService;
 import com.qc.topicmanagementsystem.service.IRedisService;
+import com.qc.topicmanagementsystem.service.MajorService;
 import com.qc.topicmanagementsystem.service.UserService;
 import com.qc.topicmanagementsystem.utils.JWTUtil;
 import com.qc.topicmanagementsystem.utils.PageUtil;
@@ -34,6 +40,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     private IRedisService iRedisService;
 
     @Autowired
+    private MajorService majorService;
+
+    @Autowired
+    private CollegeMapper collegeMapper;
+
+    @Autowired
     private UserMapper userMapper;
 
 
@@ -45,9 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         if (password==null||password.equals("")){
             throw new CustomException("密码不存在");
         }
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUsername,username);
-        User one = super.getOne(queryWrapper);
+        User one = userMapper.selectUserByUsername(username);
         if (one==null){
             throw new CustomException("用户名或密码错误");
         }
@@ -183,7 +193,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     }
 
     @Override
-    public R<List<UserResult>> listAdmin(Integer pageNums, Integer pageSize) {
+    public R<List<UserResult2>> listAdmin(Integer pageNums, Integer pageSize) {
         Integer integer = userMapper.selectSize();
         if (integer==null){
             return R.error("查询失败");
@@ -193,10 +203,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         if (users==null){
             return R.error("查询失败");
         }
-        List<UserResult> userResults = new ArrayList<>();
+        List<UserResult2> userResults = new ArrayList<>();
         for (User user:
                 users) {
-            UserResult userResult = new UserResult();
+            UserResult2 userResult = new UserResult2();
             userResult.setId(String.valueOf(user.getId()));
             userResult.setAge(user.getAge());
             userResult.setName(user.getName());
@@ -207,8 +217,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
             userResult.setSex(user.getSex());
             userResult.setPhone(user.getPhone());
             userResult.setUsername(user.getUsername());
-            userResult.setMajorName(null);
-            userResult.setCollegeName(null);
+            if (user.getMajorId()!=null){
+                userResult.setMajorId(String.valueOf(user.getMajorId()));
+                Major byId = majorService.getById(user.getMajorId());
+                userResult.setMajorName(byId.getName());
+                College oneCollegeById = collegeMapper.getOneCollegeById(byId.getCollegeId());
+                userResult.setCollegeName(oneCollegeById.getName());
+                userResult.setCollegeId(byId.getCollegeId());
+            }
             userResults.add(userResult);
         }
         return R.success(userResults);

@@ -16,7 +16,7 @@
     </update>
 <!--        List<College> listCollege();-->
     <select id="listCollege" resultType="com.qc.topicmanagementsystem.pojo.College">
-        select * from college
+        select * from select_college
     </select>
 
 <!--        College getOneCollegeById(@Param("id") Long id);-->

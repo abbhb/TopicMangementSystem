@@ -28,4 +28,8 @@
         delete from major where id = #{id}
     </delete>
 
+<!--        List<Major> getOneMajorByCollegeId(@Param("id") Long id);-->
+    <select id="getOneMajorByCollegeId" resultType="com.qc.topicmanagementsystem.pojo.Major">
+        select * from select_major where college_id = #{id}
+    </select>
 </mapper>

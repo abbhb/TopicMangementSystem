@@ -3,7 +3,9 @@ package com.qc.topicmanagementsystem.controller;
 import com.qc.topicmanagementsystem.common.R;
 import com.qc.topicmanagementsystem.common.annotation.NeedLogin;
 import com.qc.topicmanagementsystem.common.annotation.PermissionCheck;
+import com.qc.topicmanagementsystem.pojo.College;
 import com.qc.topicmanagementsystem.pojo.Major;
+import com.qc.topicmanagementsystem.pojo.vo.CollegeWithMajor;
 import com.qc.topicmanagementsystem.pojo.vo.MajorResult;
 import com.qc.topicmanagementsystem.service.MajorService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,17 @@ public class MajorController {
             return R.error("数据异常");
         }
         return majorService.updataMajor(major);
+    }
+
+    @NeedLogin
+    @GetMapping ("/listWithCollege")
+    public R<List<CollegeWithMajor>> listMajorWithCollege() {
+        return majorService.listMajorWithCollege();
+    }
+
+    @GetMapping ("/collegeByMajorId")
+    public R<College> getCollegeIdByMajorId(String id) {
+        return majorService.getCollegeIdByMajorId(Long.valueOf(id));
     }
 
 }

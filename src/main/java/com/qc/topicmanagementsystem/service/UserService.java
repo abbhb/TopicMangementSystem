@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.qc.topicmanagementsystem.common.R;
 import com.qc.topicmanagementsystem.pojo.User;
 import com.qc.topicmanagementsystem.pojo.vo.UserResult;
+import com.qc.topicmanagementsystem.pojo.vo.UserResult2;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface UserService extends IService<User> {
 
     R<UserResult> changePassword(String password, String newpassword, String checknewpassword);
 
-    R<List<UserResult>> listAdmin(Integer pageNums, Integer pageSize);
+    R<List<UserResult2>> listAdmin(Integer pageNums, Integer pageSize);
 
     R<String> addUser(User user);
 

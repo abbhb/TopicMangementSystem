@@ -35,6 +35,11 @@ public class CollegeController {
     @GetMapping ("/list")
     public R<List<CollegeResult>> listCollege() {
         return collegeService.listCollege();
+    }@NeedLogin
+
+    @GetMapping ("/id")
+    public R<College> getCollegeById(Long id) {
+        return R.success(collegeService.getCollegeById(id));
     }
 
     @NeedLogin

@@ -51,4 +51,5 @@ public interface UserMapper extends BaseMapper<User> {
     User selectById(@Param("id") Long id);
 
 
+    User selectUserByUsername(@Param("username") String username);
 }

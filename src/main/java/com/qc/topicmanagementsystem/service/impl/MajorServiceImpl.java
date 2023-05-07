@@ -1,11 +1,15 @@
 package com.qc.topicmanagementsystem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qc.topicmanagementsystem.common.CustomException;
 import com.qc.topicmanagementsystem.common.R;
 import com.qc.topicmanagementsystem.mapper.MajorMapper;
+import com.qc.topicmanagementsystem.pojo.College;
 import com.qc.topicmanagementsystem.pojo.Major;
+import com.qc.topicmanagementsystem.pojo.vo.CollegeWithMajor;
 import com.qc.topicmanagementsystem.pojo.vo.MajorResult;
+import com.qc.topicmanagementsystem.service.CollegeService;
 import com.qc.topicmanagementsystem.service.MajorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ import java.util.List;
 public class MajorServiceImpl extends ServiceImpl<MajorMapper, Major> implements MajorService {
     @Autowired
     private MajorMapper majorMapper;
+
+    @Autowired
+    private CollegeService collegeService;
 
 
     @Transactional
@@ -55,6 +62,29 @@ public class MajorServiceImpl extends ServiceImpl<MajorMapper, Major> implements
     public Major getMajorById(Long id) {
         Major oneMajorById = majorMapper.getOneMajorById(id);
         return oneMajorById;
+    }
+
+    @Override
+    public R<List<CollegeWithMajor>> listMajorWithCollege() {
+        List<CollegeWithMajor> collegeWithMajorArrayList = new ArrayList<>();
+        List<College> list = collegeService.list();
+        for (College c:
+             list) {
+            CollegeWithMajor college = new CollegeWithMajor();
+            college.setId(c.getId());
+            college.setName(c.getName());
+            college.setMajorList(majorMapper.getOneMajorByCollegeId(c.getId()));
+            collegeWithMajorArrayList.add(college);
+        }
+        return R.success(collegeWithMajorArrayList);
+    }
+
+    @Override
+    public R<College> getCollegeIdByMajorId(Long id) {
+        Major byId = getById(id);
+        College college = new College();
+        college.setId(byId.getCollegeId());
+        return R.success(college);
     }
 
     @Transactional
