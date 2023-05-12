@@ -30,7 +30,7 @@
 
     <!--         List<Topic> teacher(@Param("id")Long teacherId);-->
     <select id="teacher" resultType="com.qc.topicmanagementsystem.pojo.Topic">
-        select topic.* from select_topic where topic.teacher = #{id}
+        select select_topic.* from select_topic where select_topic.teacher = #{id}
     </select>
 
 <!--        int updataTopic(Topic topic);-->
